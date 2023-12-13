@@ -41,6 +41,11 @@ function sherman_child_ext_pubs_enqueue_scripts() {
     wp_enqueue_script( 'htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), SHERMAN_CHILD_EXT_PUBS_VERSION, true );
 }
 
+// enqueue stylsheet (https://fonts.googleapis.com/icon?family=Material+Icons)
+add_action( 'wp_enqueue_scripts', 'sherman_child_ext_pubs_enqueue_styles' );
+function sherman_child_ext_pubs_enqueue_styles() {
+    wp_enqueue_style( 'material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', array(), SHERMAN_CHILD_EXT_PUBS_VERSION );
+}
 
 
 function pub_pod_filter($query)
