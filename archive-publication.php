@@ -20,13 +20,26 @@ get_header();
                     " hx-target="#publication-wrap" hx-push-url="true" hx-swap="outerHTML" hx-select="#publication-wrap" hx-trigger="change" method="get">
                     <section class="filters">
                         <div>
+                            <label for="search"><strong>Search:</strong></label>
+                            <br>
+                            <input type="text" id="search" name="s" value="<?php echo isset($_GET['s']) ? $_GET['s'] : '' ?>">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                        <div>
                             <p><strong>Category:</strong></p>
 
                             <?php
                             $categories = get_categories();
-                            // get only the populated categories
+                            // get only the categories with published posts
                             $categories = array_filter($categories, function ($category) {
-                                return $category->count > 0;
+                                $args = array(
+                                    'post_type' => 'publication',
+                                    'post_status' => 'publish',
+                                    'category_name' => $category->slug,
+                                    'posts_per_page' => 1
+                                );
+                                $query = new WP_Query($args);
+                                return $query->have_posts();
                             });
 
                             // but there could be multiple categories selected
@@ -98,9 +111,20 @@ get_header();
                 <?php while (have_posts()) : the_post(); ?>
                     <?php
                     // these are not pods, they're ACF custom post types
+                    // if the keep_private field is set to "private", don't show it
+                    // $post_status = get_post_status();
+                    // if ($post_status == 'private') {
+                    //     continue;
+                    // }
+
+
+
+
+
                     $post = get_post();
                     $first_category = get_the_category()[0]->name;
                     $item_link = get_the_permalink();
+
 
                     // check if the post has is_pdf set to true
                     $isPDF = get_field('is_pdf');
@@ -138,7 +162,13 @@ get_header();
 
 
             </ul>
+
+            <?php if (!have_posts()) : ?>
+                <div class="alert alert-warning">
+                    <?php _e('Sorry, no results were found.', 'sage'); ?>
+                </div>
             <?php
+            endif;
 
             the_posts_pagination(
                 array(

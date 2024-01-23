@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template for displaying single publications.
  *
@@ -8,28 +9,20 @@
 get_header(); ?>
 
 
-<?php
-// Start the loop.
-while (have_posts()) : the_post();
-?>
+<?php while (have_posts()) : the_post(); ?>
+  <div id="primary" class="content-area">
+    <div id="expub_content">
 
-<div id="primary" class="content-area">
-  <div id="expub_content">
+      <?php
+      // do the content
+      the_content();
+      ?>
 
-    <?php
-        // do the content
-        the_content();
-    ?>
+      </main>
+    </div>
+  </div>
 
-  </main>
-</div>
+  <?php endwhile; ?>
 
-<?php
-// End the loop.
-endwhile;
-?>
-
-
-
-<?php
-get_footer();
+  <?php
+  get_footer();

@@ -1,50 +1,76 @@
-<?php 
+<?php
+function link_parent_theme_style()
+{
+    wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
+    wp_enqueue_style('child-style', get_stylesheet_uri());
+}
+add_action('wp_enqueue_scripts', 'link_parent_theme_style');
+
+
+function exclude_private_posts_from_loop($query)
+{
+    if (is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    // Exclude private posts
+    $query->set('post_status', 'publish');
+
+    // You can add other conditions or modifications here if needed
+
+}
+add_action('pre_get_posts', 'exclude_private_posts_from_loop');
+
 
 /** version */
-define( 'SHERMAN_CHILD_EXT_PUBS_VERSION', '1.0.0' );
+define('stowe_CHILD_EXT_PUBS_VERSION', '1.0.0');
 
 /** Requires that an ACF post type of "publication" exists. 
  * If it doesnt, display a message to the user. **/
 
-add_action( 'admin_notices', 'sherman_child_ext_pubs_admin_notice' );
+add_action('admin_notices', 'stowe_child_ext_pubs_admin_notice');
 
-function sherman_child_ext_pubs_admin_notice() {
-    $post_type_object = get_post_type_object( 'publication' );
-    if ( ! $post_type_object ) {
-        ?>
+function stowe_child_ext_pubs_admin_notice()
+{
+    $post_type_object = get_post_type_object('publication');
+    if (!$post_type_object) {
+?>
         <div class="error">
-            <p><?php _e( 'The Sherman Child Extension Publications child theme requires that an ACF post type of "Publication" exists. Please create this post type.', 'sherman-child-ext-pubs' ); ?></p>
+            <p><?php _e('The Stowe Child Extension Publications child theme requires that an ACF post type of "Publication" exists. Please create this post type.', 'stowe-child-ext-pubs'); ?></p>
         </div>
-        <?php
+    <?php
     }
 }
 
 // also requires a page called 'search' to exist
-add_action( 'admin_notices', 'sherman_child_ext_pubs_admin_notice_search' );
+add_action('admin_notices', 'stowe_child_ext_pubs_admin_notice_search');
 
-function sherman_child_ext_pubs_admin_notice_search(){
+function stowe_child_ext_pubs_admin_notice_search()
+{
     // check for a page with the slug 'search'
-    $search_page = get_page_by_path( 'search' );
-    if ( ! $search_page ) {
-        ?>
+    $search_page = get_page_by_path('search');
+    if (!$search_page) {
+    ?>
         <div class="error">
-            <p><?php _e( 'The Sherman Child Extension Publications child theme requires that a page with the slug "search" exists. Please create this page.', 'sherman-child-ext-pubs' ); ?></p>
+            <p><?php _e('The Stowe Child Extension Publications child theme requires that a page with the slug "search" exists. Please create this page.', 'stowe-child-ext-pubs'); ?></p>
         </div>
-        <?php
+<?php
     }
 }
 
 // enqueue scripts htmx cdn
-add_action( 'wp_enqueue_scripts', 'sherman_child_ext_pubs_enqueue_scripts' );
+add_action('wp_enqueue_scripts', 'stowe_child_ext_pubs_enqueue_scripts');
 
-function sherman_child_ext_pubs_enqueue_scripts() {
-    wp_enqueue_script( 'htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), SHERMAN_CHILD_EXT_PUBS_VERSION, true );
+function stowe_child_ext_pubs_enqueue_scripts()
+{
+    wp_enqueue_script('htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), stowe_CHILD_EXT_PUBS_VERSION, true);
 }
 
-// enqueue stylsheet (https://fonts.googleapis.com/icon?family=Material+Icons)
-add_action( 'wp_enqueue_scripts', 'sherman_child_ext_pubs_enqueue_styles' );
-function sherman_child_ext_pubs_enqueue_styles() {
-    wp_enqueue_style( 'material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', array(), SHERMAN_CHILD_EXT_PUBS_VERSION );
+
+add_action('wp_enqueue_scripts', 'stowe_child_ext_pubs_enqueue_styles');
+function stowe_child_ext_pubs_enqueue_styles()
+{
+    wp_enqueue_style('material-icons', 'https://fonts.googleapis.com/icon?family=Material+Icons', array(), stowe_CHILD_EXT_PUBS_VERSION);
 }
 
 
@@ -120,3 +146,13 @@ function custom_publication_archive_query($query)
         }
     }
 }
+
+function custom_publication_search_template($template) {
+    if (is_search() && get_query_var('post_type') == 'publication') {
+        // Use the custom archive-publication.php template
+        return locate_template('archive-publication.php');
+    }
+    return $template;
+}
+add_filter('template_include', 'custom_publication_search_template');
+
