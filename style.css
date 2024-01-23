@@ -8,17 +8,7 @@
 @import url(../beecher-stowe/css/bs-color-husky-blue.css);
 @import url(../beecher-stowe/css/bs-font-compressed.css);
 
-h1 {
-  margin-top: 20px !important;
-  margin-bottom: 20px !important;
-  font-weight: 700 !important;
-  color: #000E2F;
-}
 
-ul {
-  list-style-type: none;
-  padding-left: 0px !important;
-}
 
 #publication-list li {
   margin-bottom: 30px;
@@ -29,13 +19,7 @@ ul {
   margin-bottom: 10px;
 }
 
-p {
-  margin-bottom: 5px !important;
-}
 
-h4 {
-  font-size: 16px !important;
-}
 
 .filters {
   margin: 20px 0px;
