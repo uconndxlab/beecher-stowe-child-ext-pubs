@@ -3,10 +3,9 @@
 /**
  * Template Name: Search Page
  */
+
 get_header();
 ?>
-
-
 
 <div id="searchApp">
     <div class="row">
@@ -110,17 +109,6 @@ get_header();
 
                 <?php while (have_posts()) : the_post(); ?>
                     <?php
-                    // these are not pods, they're ACF custom post types
-                    // if the keep_private field is set to "private", don't show it
-                    // $post_status = get_post_status();
-                    // if ($post_status == 'private') {
-                    //     continue;
-                    // }
-
-
-
-
-
                     $post = get_post();
                     $first_category = get_the_category()[0]->name;
                     $item_link = get_the_permalink();

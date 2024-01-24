@@ -1,9 +1,7 @@
 <?php
 
 /**
- * The template for displaying single publications.
- *
- *
+ * The template for displaying single publication.
  */
 
 get_header(); ?>
@@ -12,7 +10,6 @@ get_header(); ?>
 <?php while (have_posts()) : the_post(); ?>
   <div id="primary" class="content-area">
     <div id="expub_content">
-
       <?php
       // do the content
       the_content();
