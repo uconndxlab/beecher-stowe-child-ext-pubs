@@ -121,7 +121,7 @@ get_header();
                     if ($isPDF) {
                         $pdf_upload = get_field('pdf_upload');
 
-                        $item_link = $pdf_upload['guid'];
+                        $item_link = $pdf_upload;
                     }
 
 
