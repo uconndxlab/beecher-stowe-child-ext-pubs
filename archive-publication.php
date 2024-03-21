@@ -99,6 +99,17 @@ get_header();
 
         <div class="col-lg-9" id="publication-wrap">
 
+        <div class="my-3 pub-sidebar-wrap">
+            <!-- get the sidebar named publication-sidebar if it exists, otherwise bootstrap alert -->
+            <?php if (is_active_sidebar('publication_lede')) : ?>
+                <?php dynamic_sidebar('publication_lede'); ?>
+            <?php else : ?>
+                <div class="alert alert-warning">
+                    <?php _e('Please activate the publication_lede Widgets.', 'sage'); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+
             <ul id="publication-list">
                 <!-- <li class="publication-block"><a href="./interior.html"><img src="./img/farm.jpg">
                             <p class="publication-label"><span>Health</span></p>

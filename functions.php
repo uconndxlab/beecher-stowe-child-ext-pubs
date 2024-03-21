@@ -27,6 +27,23 @@ add_action('pre_get_posts', 'exclude_private_posts_from_loop');
 /** version */
 define('stowe_CHILD_EXT_PUBS_VERSION', '1.0.0');
 
+// register a sidebar called publication_lede
+
+add_action('widgets_init', 'stowe_child_ext_pubs_widgets_init');
+
+function stowe_child_ext_pubs_widgets_init()
+{
+    register_sidebar(array(
+        'name'          => __('Publication Archive Top', 'stowe-child-ext-pubs'),
+        'id'            => 'publication_lede',
+        'description'   => __('Widgets in this area will be shown on the publication archive.', 'stowe-child-ext-pubs'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ));
+}
+
 /** Requires that an ACF post type of "publication" exists. 
  * If it doesnt, display a message to the user. **/
 
@@ -78,8 +95,9 @@ function stowe_child_ext_pubs_enqueue_styles()
 
 function pub_pod_filter($query)
 {
-    if (!is_admin() && $query->is_main_query() && is_home()) {
-        $query->set('post_type', array('publication'));
+   // when on the home query, or when looking at a category or tag archive, or when searching, or when looking at a date archive
+    if ($query->is_main_query() && (is_home() || is_category() || is_tag() || is_search() || is_date())) {
+        $query->set('post_type', array('post', 'publication'));
     }
 }
 
