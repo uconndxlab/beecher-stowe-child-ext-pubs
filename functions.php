@@ -97,7 +97,12 @@ function pub_pod_filter($query)
 {
    // when on the home query, or when looking at a category or tag archive, or when searching, or when looking at a date archive
     if ($query->is_main_query() && (is_home() || is_category() || is_tag() || is_search() || is_date())) {
-        $query->set('post_type', array('post', 'publication'));
+        // but it's not the Publications archive page
+        if (!is_post_type_archive('publication')) {
+            // then include Publications in the query
+            $query->set('post_type', array('post', 'publication'));
+        }
+       
     }
 }
 
