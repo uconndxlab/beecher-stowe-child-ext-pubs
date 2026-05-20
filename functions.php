@@ -11,7 +11,8 @@ add_action('wp_enqueue_scripts', 'link_parent_theme_style');
 
 function exclude_private_posts_from_loop($query)
 {
-    if (is_admin() || !$query->is_main_query()) {
+    // Skip modifications for admin, non-main queries, and preview requests
+    if (is_admin() || !$query->is_main_query() || (method_exists($query, 'is_preview') && $query->is_preview())) {
         return;
     }
 
@@ -95,14 +96,16 @@ function stowe_child_ext_pubs_enqueue_styles()
 
 function pub_pod_filter($query)
 {
-   // when on the home query, or when looking at a category or tag archive, or when searching, or when looking at a date archive
+    if (is_admin()) {
+        return;
+    }
+    // when on the home query, or when looking at a category or tag archive, or when searching, or when looking at a date archive
     if ($query->is_main_query() && (is_home() || is_category() || is_tag() || is_search() || is_date())) {
         // but it's not the Publications archive page
         if (!is_post_type_archive('publication')) {
             // then include Publications in the query
             $query->set('post_type', array('post', 'publication'));
         }
-       
     }
 }
 
@@ -114,7 +117,8 @@ function pubsearch_run_hooks()
     add_action('wp_enqueue_scripts', 'pubsearch_enqueue_global_scripts');
 }
 
-pubsearch_run_hooks();
+// these function don't appear to exist anymore 
+ //pubsearch_run_hooks();
 
 function isHTMX()
 {
@@ -172,7 +176,8 @@ function custom_publication_archive_query($query)
     }
 }
 
-function custom_publication_search_template($template) {
+function custom_publication_search_template($template)
+{
     if (is_search() && get_query_var('post_type') == 'publication') {
         // Use the custom archive-publication.php template
         return locate_template('archive-publication.php');
@@ -180,4 +185,3 @@ function custom_publication_search_template($template) {
     return $template;
 }
 add_filter('template_include', 'custom_publication_search_template');
-
